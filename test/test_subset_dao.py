@@ -1,9 +1,9 @@
 from src.dao.interface_dao import Dao
-from src.dao.user_dao import UserDao
+from src.dao.subset_dao import SubsetDao
 
 
-class TestUserDao:
+class TestSubsetDao:
 
     def test_query_all(self):
-        dao: Dao = UserDao()
+        dao: Dao = SubsetDao()
         assert len(dao.query_all()) == dao.count()

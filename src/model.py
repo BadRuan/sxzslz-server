@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import BaseModel
 
 
@@ -15,4 +16,17 @@ class UserModel(BaseModel):
     nick_name: str
     password: str
     avatar_src: str
+    create_time: str
+
+
+class SubsetType(Enum):
+    ARTICLE = 0  # 文章
+    PHOTO = 1  # 图片
+    FILE = 2  # 文件
+
+
+class SubsetModel(BaseModel):
+    subset_id: int
+    subset_name: str
+    subset_type: SubsetType
     create_time: str

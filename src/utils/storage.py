@@ -21,9 +21,15 @@ class Storage:
     def query_all(self, sql: str):
         return self._execute(sql).fetchall()
 
-    def save_data(self, sql: str):
+    def save(self, sql: str):
         self._execute(sql)
         self.conn.commit()
+
+    def remove(self, sql: str):
+        self.save(sql)
+
+    def update(self, sql: str):
+        self.save(sql)
 
     def __enter__(self):
         try:
