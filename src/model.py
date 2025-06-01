@@ -7,3 +7,12 @@ class DatabaseConfig(BaseModel):
     user: str
     password: str
     database: str
+
+
+class UserModel(BaseModel):
+    user_id: int
+    user_name: str
+    nick_name: str
+    password: str
+    avatar_src: str
+    create_time: str

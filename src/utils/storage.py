@@ -9,9 +9,23 @@ logger = Logger(__name__)
 class Storage:
     def __init__(self):
         self.conn = None
-        self.cursor = None
 
-    def _get_conn(self):
+    def _execute(self, sql: str):
+        cursor = self.conn.cursor()
+        cursor.execute(sql)
+        return cursor
+
+    def query_one(self, sql: str):
+        return self._execute(sql).fetchone()
+
+    def query_all(self, sql: str):
+        return self._execute(sql).fetchall()
+
+    def save_data(self, sql: str):
+        self._execute(sql)
+        self.conn.commit()
+
+    def __enter__(self):
         try:
             config: DatabaseConfig = get_database_config()
             self.conn = connect(
@@ -24,20 +38,10 @@ class Storage:
                 cursorclass=cursors.DictCursor,
             )
             logger.debug("MySQL数据库连接成功")
-            return self.conn
+            return self
 
         except Exception:
             logger.error(f"MySQL数据库异常: {Exception}")
 
-    def query(self, sql: str):
-        self.cursor = self.conn.cursor()
-        self.cursor.execute(sql)
-        return self.cursor.fetchall()
-
-    def __enter__(self):
-        self._get_conn()
-        return self
-
     def __exit__(self, exc_type, exc, tb):
-        self.cursor.close()
         self.conn.close()

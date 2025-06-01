@@ -1,12 +1,10 @@
-from src.utils.storage import Storage
+from src.dao.user_dao import UserDao
 
 
 def main():
-    with Storage() as storage:
-        sql: str = "SELECT * FROM user"
-        result = storage.query(sql)
-        for i in result:
-            print(i)
+    dao = UserDao()
+    result = dao.select_all_user()
+    print(result)
 
 
 if __name__ == "__main__":
