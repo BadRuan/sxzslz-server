@@ -1,16 +1,28 @@
-from src.dao.interface_dao import Dao
-from src.dao.user_dao import UserDao
-from src.dao.subset_dao import SubsetDao
+import uvicorn
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from src.routes.api import api_router
 
 
-def main():
-    dao: Dao = SubsetDao()
-    count = dao.count()
-    print(f"count: {count}")
-    result = dao.query_all()
-    for i in result:
-        print(i)
+app = FastAPI()
+
+
+# 跨域配置
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# 挂载路由
+app.include_router(api_router, prefix="/api", tags=["apis"])
+
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run(app="main:app", host="0.0.0.0", port=8080)
