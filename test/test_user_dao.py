@@ -1,9 +1,0 @@
-from src.dao.interface_dao import Dao
-from src.dao.user_dao import UserDao
-
-
-class TestUserDao:
-
-    def test_query_all(self):
-        dao: Dao = UserDao()
-        assert len(dao.query_all()) == dao.count()

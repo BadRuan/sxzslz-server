@@ -40,7 +40,7 @@ class UserDao(Dao):
     def query_one(self, user_id: int):
         sql: str = f"SELECT * FROM `user` WHERE `user_id` = {user_id}"
         with Storage() as storage:
-            results = storage.query_all(sql)
+            results = storage.query_one(sql)
             return results
 
     def query_all(self) -> List:
@@ -48,11 +48,9 @@ class UserDao(Dao):
         with Storage() as storage:
             results = storage.query_all(sql)
             return results
-        return []
 
     def count(self) -> int:
         sql: str = "SELECT COUNT(*) AS 'count' FROM `user`"
         with Storage() as storage:
             result = storage.query_one(sql)
             return result["count"]
-        return 0

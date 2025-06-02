@@ -3,7 +3,7 @@ from abc import abstractmethod
 from typing import List
 
 
-class Dao(metaclass=ABCMeta):
+class Service(metaclass=ABCMeta):
 
     @abstractmethod
     def add(self, *args, **kwargs) -> bool:
