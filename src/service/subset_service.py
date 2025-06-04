@@ -3,6 +3,7 @@ from src.model import SubsetType
 from src.service.interface_service import Service
 from src.dao.interface_dao import Dao
 from src.dao.subset_dao import SubsetDao
+from src.model import SubsetType, SubsetModel
 
 
 class SubsetService(Service):
@@ -16,19 +17,19 @@ class SubsetService(Service):
         subset_name: str,
         subset_type: SubsetType,
     ) -> bool:
-        self._dao.add(subset_name, subset_type)
+        return self._dao.add(subset_name, subset_type)
 
     def remove(self, subset_id: int) -> bool:
-        self._dao.remove(subset_id)
+        return self._dao.remove(subset_id)
 
     def update(self, subset_id: int, subset_name: str) -> bool:
-        self._dao.update(subset_id, subset_name)
+        return self._dao.update(subset_id, subset_name)
 
-    def query_one(self, subset_id: int):
-        self._dao.query_one(subset_id)
+    def query_one(self, subset_id: int) -> SubsetModel | None:
+        return self._dao.query_one(subset_id)
 
-    def query_all(self) -> List:
-        self._dao.query_all()
+    def query_all(self) -> List[SubsetModel]:
+        return self._dao.query_all()
 
     def count(self) -> int:
-        self._dao.count()
+        return self._dao.count()

@@ -2,6 +2,7 @@ from typing import List
 from src.utils.logger import Logger
 from src.dao.interface_dao import Dao
 from src.utils.storage import Storage
+from src.model import UserModel
 
 
 logger = Logger(__name__)
@@ -37,17 +38,37 @@ class UserDao(Dao):
             return True
         return False
 
-    def query_one(self, user_id: int):
+    def query_one(self, user_id: int) -> UserModel | None:
         sql: str = f"SELECT * FROM `user` WHERE `user_id` = {user_id}"
         with Storage() as storage:
-            results = storage.query_one(sql)
-            return results
+            result = storage.query_one(sql)
+            if result == None:
+                return None
+            else:
+                return UserModel(
+                    user_id=int(result["user_id"]),
+                    user_name=result["user_name"],
+                    nick_name=result["nick_name"],
+                    password=result["password"],
+                    avatar_src=result["avatar_src"],
+                    create_time=result["create_time"],
+                )
 
-    def query_all(self) -> List:
+    def query_all(self) -> List[UserModel]:
         sql: str = "SELECT * FROM `user`"
         with Storage() as storage:
             results = storage.query_all(sql)
-            return results
+            return [
+                UserModel(
+                    user_id=int(item["user_id"]),
+                    user_name=item["user_name"],
+                    nick_name=item["nick_name"],
+                    password=item["password"],
+                    avatar_src=item["avatar_src"],
+                    create_time=item["create_time"],
+                )
+                for item in results
+            ]
 
     def count(self) -> int:
         sql: str = "SELECT COUNT(*) AS 'count' FROM `user`"

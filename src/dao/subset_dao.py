@@ -1,7 +1,7 @@
 from src.utils.storage import Storage
 from typing import List
 from src.dao.interface_dao import Dao
-from src.model import SubsetType
+from src.model import SubsetType, SubsetModel
 
 
 class SubsetDao(Dao):
@@ -39,19 +39,33 @@ class SubsetDao(Dao):
             return True
         return False
 
-    def query_one(self, subset_id: int):
-        sql: str = f"SELECT * FROM `subset` WHERE subset_id = '{subset_id}"
+    def query_one(self, subset_id: int) -> SubsetModel | None:
+        sql: str = f"SELECT * FROM `subset` WHERE subset_id = '{subset_id}'"
         with Storage() as storage:
-            results = storage.query_all(sql)
-            return results
-        return []
+            result = storage.query_one(sql)
+            if result == None:
+                return None
+            else:
+                return SubsetModel(
+                    subset_id=int(result["subset_id"]),
+                    subset_name=result["subset_name"],
+                    subset_type=SubsetType(result["subset_type"]),
+                    create_time=result["create_time"],
+                )
 
-    def query_all(self) -> List:
+    def query_all(self) -> List[SubsetModel]:
         sql: str = "SELECT * FROM `subset`"
         with Storage() as storage:
             results = storage.query_all(sql)
-            return results
-        return []
+            return [
+                SubsetModel(
+                    subset_id=int(item["subset_id"]),
+                    subset_name=item["subset_name"],
+                    subset_type=SubsetType(item["subset_type"]),
+                    create_time=item["create_time"],
+                )
+                for item in results
+            ]
 
     def count(self) -> int:
         sql: str = "SELECT COUNT(*) AS 'count' FROM `subset`"

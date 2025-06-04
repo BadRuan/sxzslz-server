@@ -2,6 +2,7 @@ from typing import List
 from src.service.interface_service import Service
 from src.dao.interface_dao import Dao
 from src.dao.user_dao import UserDao
+from src.model import UserModel
 
 
 class UserService(Service):
@@ -21,10 +22,10 @@ class UserService(Service):
     def update(self, user_id: int, new_hashed_password: str) -> bool:
         return self._dao.update(user_id, new_hashed_password)
 
-    def query_one(self, user_id: int):
+    def query_one(self, user_id: int) -> UserModel | None:
         return self._dao.query_one(user_id)
 
-    def query_all(self) -> List:
+    def query_all(self) -> List[UserModel]:
         return self._dao.query_all()
 
     def count(self) -> int:

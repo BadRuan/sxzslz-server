@@ -1,6 +1,8 @@
 from abc import ABCMeta
 from abc import abstractmethod
-from typing import List
+from typing import List, TypeVar
+
+T = TypeVar("T")
 
 
 class Service(metaclass=ABCMeta):
@@ -18,11 +20,11 @@ class Service(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def query_one(self, *args, **kwargs):
+    def query_one(self, *args, **kwargs) -> T | None:
         pass
 
     @abstractmethod
-    def query_all(self) -> List:
+    def query_all(self) -> List[T]:
         pass
 
     @abstractmethod

@@ -1,5 +1,6 @@
-from enum import Enum
+from enum import Enum, unique
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class DatabaseConfig(BaseModel):
@@ -16,17 +17,18 @@ class UserModel(BaseModel):
     nick_name: str
     password: str
     avatar_src: str
-    create_time: str
+    create_time: datetime
 
 
+@unique
 class SubsetType(Enum):
-    ARTICLE = 0  # 文章
-    PHOTO = 1  # 图片
-    FILE = 2  # 文件
+    Article = 0  # 文章
+    Photo = 1  # 图片
+    File = 2  # 文件
 
 
 class SubsetModel(BaseModel):
     subset_id: int
     subset_name: str
     subset_type: SubsetType
-    create_time: str
+    create_time: datetime

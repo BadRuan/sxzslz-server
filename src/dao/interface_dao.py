@@ -1,30 +1,26 @@
 from abc import ABCMeta
 from abc import abstractmethod
-from typing import List
+from typing import List, TypeVar
+
+T = TypeVar("T")
 
 
 class Dao(metaclass=ABCMeta):
 
     @abstractmethod
-    def add(self, *args, **kwargs) -> bool:
-        pass
+    def add(self, *args, **kwargs) -> bool: ...
 
     @abstractmethod
-    def remove(self, *args, **kwargs) -> bool:
-        pass
+    def remove(self, *args, **kwargs) -> bool: ...
 
     @abstractmethod
-    def update(self, *args, **kwargs) -> bool:
-        pass
+    def update(self, *args, **kwargs) -> bool: ...
 
     @abstractmethod
-    def query_one(self, *args, **kwargs):
-        pass
+    def query_one(self, *args, **kwargs) -> T | None: ...
 
     @abstractmethod
-    def query_all(self) -> List:
-        pass
+    def query_all(self) -> List[T]: ...
 
     @abstractmethod
-    def count(self) -> int:
-        pass
+    def count(self) -> int: ...
