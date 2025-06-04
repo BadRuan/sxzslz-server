@@ -4,6 +4,7 @@ from src.exceptions.api_exception import NotFoundException
 from src.service.interface_service import Service
 from src.service.user_service import UserService
 from src.service.subset_service import SubsetService
+from src.service.article_service import ArticleService
 
 
 api_router = APIRouter(tags=["apis"])
@@ -44,6 +45,28 @@ async def subset_item(subset_id: int):
         service: Service = SubsetService()
         return SuccessResponse(
             data=service.query_one(subset_id), meta={"info": "success"}
+        )
+    except NotFoundException as e:
+        raise HTTPException(status_code=404, detail=e.json())
+
+
+@api_router.get("/article", response_model=SuccessResponse, status_code=200)
+async def article():
+    try:
+        service: Service = ArticleService()
+        return SuccessResponse(data=service.query_all(), meta={"info": "success"})
+    except NotFoundException as e:
+        raise HTTPException(status_code=404, detail=e.json())
+
+
+@api_router.get(
+    "/article/{article_id}", response_model=SuccessResponse, status_code=200
+)
+async def subset_item(article_id: int):
+    try:
+        service: Service = ArticleService()
+        return SuccessResponse(
+            data=service.query_one(article_id), meta={"info": "success"}
         )
     except NotFoundException as e:
         raise HTTPException(status_code=404, detail=e.json())

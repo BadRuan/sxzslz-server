@@ -16,12 +16,18 @@ class ArticleDao(Dao):
         super().__init__(table_name, primary_key_name)
 
     def add(
-        self, user_id: int, title: str, content: str, img_src: str, state: bool
+        self,
+        subset_id: int,
+        user_id: int,
+        title: str,
+        content: str,
+        img_src: str,
+        state: bool,
     ) -> bool:
         sql: str = f"""INSERT INTO `{self.table_name}` (
-                        user_id, title, content, img_src, state, create_time
+                        subset_id, user_id, title, content, img_src, state, create_time
                         ) VALUES (
-                        '{user_id}', '{title}', '{content}', '{img_src}', {state}, now()
+                        '{subset_id}', '{user_id}', '{title}', '{content}', '{img_src}', {state}, now()
                         )"""
         logger.debug(f"Article Add SQL: {sql}")
         with Storage() as storage:
@@ -42,6 +48,7 @@ class ArticleDao(Dao):
             else:
                 return ArticleModel(
                     article_id=int(result["article_id"]),
+                    subset_id=int(result["subset_id"]),
                     user_id=int(result["user_id"]),
                     title=result["title"],
                     content=result["content"],
@@ -57,6 +64,7 @@ class ArticleDao(Dao):
             return [
                 ArticleModel(
                     article_id=int(item["article_id"]),
+                    subset_id=int(item["subset_id"]),
                     user_id=int(item["user_id"]),
                     title=item["title"],
                     content=item["content"],

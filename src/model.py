@@ -37,6 +37,7 @@ class SubsetModel(BaseModel):
 class ArticleModel(BaseModel):
     article_id: int
     user_id: int
+    subset_id: int
     title: str
     content: str
     state: bool
