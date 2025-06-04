@@ -27,23 +27,20 @@ class ArticleDao(Dao):
         sql: str = f"""INSERT INTO `{self.table_name}` (
                         subset_id, user_id, title, content, img_src, state, create_time
                         ) VALUES (
-                        '{subset_id}', '{user_id}', '{title}', '{content}', '{img_src}', {state}, now()
+                        '%s', '%s', '%s', '%s', '%s', %s, now()
                         )"""
         logger.debug(f"Article Add SQL: {sql}")
         with Storage() as storage:
-            storage.save(sql)
+            storage.save(sql, (subset_id, user_id, title, content, img_src, state))
             return True
         return False
 
     def update(self, *args, **kwargs) -> bool: ...
 
     def query_one(self, article_id: int) -> ArticleModel | None:
-        sql: str = "SELECT * FROM `%s` WHERE `article_id` = %s" % (
-            self.table_name,
-            article_id,
-        )
+        sql: str = f"SELECT * FROM `{self.table_name}` WHERE `article_id` = %s"
         with Storage() as storage:
-            result = storage.query_one(sql)
+            result = storage.query_one(sql, (article_id,))
             if result == None:
                 return None
             else:
@@ -60,9 +57,9 @@ class ArticleDao(Dao):
 
     def query_by_page(self, page: int, limit: int) -> List[ArticleModel]:
         offset: int = (page - 1) * limit
-        sql: str = "SELECT * FROM %s LIMIT %s, %s" % (self.table_name, offset, limit)
+        sql: str = f"SELECT * FROM `{self.table_name}` LIMIT %s, %s"
         with Storage() as storage:
-            results = storage.query_all(sql)
+            results = storage.query_all(sql, (offset, limit))
             return [
                 ArticleModel(
                     article_id=int(item["article_id"]),
@@ -78,7 +75,7 @@ class ArticleDao(Dao):
             ]
 
     def query_all(self) -> List[ArticleModel]:
-        sql: str = "SELECT * FROM `%s`" % (self.table_name)
+        sql: str = f"SELECT * FROM `{self.table_name}`"
         with Storage() as storage:
             results = storage.query_all(sql)
             return [

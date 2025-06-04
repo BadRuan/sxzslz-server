@@ -19,36 +19,30 @@ class SubsetDao(Dao):
         subset_type: SubsetType,
     ) -> bool:
         sql: str = f"""INSERT INTO `{self.table_name}` (
-                        subset_name, 
-                        subset_type
+                        subset_name,  subset_type
                         ) VALUES (
-                        '{subset_name}', 
-                        {subset_type.value}
+                        '%s', %s
                         )"""
         with Storage() as storage:
-            storage.save(sql)
+            storage.save(sql, (subset_name, subset_type.value))
             return True
         return False
 
     def update(self, subset_id: int, subset_name: str) -> bool:
         sql: str = (
-            """UPDATE `%s`
+            f"""UPDATE `{self.table_name}`
                         SET subset_name = '%s'
                         WHERE subset_id = '%s"""
-            % (self.table_name, subset_name, subset_id)
         )
         with Storage() as storage:
-            storage.update(sql)
+            storage.update(sql, (subset_name, subset_id))
             return True
         return False
 
     def query_one(self, subset_id: int) -> SubsetModel | None:
-        sql: str = f"SELECT * FROM `%s` WHERE subset_id = '%s'" % (
-            self.table_name,
-            subset_id,
-        )
+        sql: str = f"SELECT * FROM `{self.table_name}` WHERE subset_id = '%s'"
         with Storage() as storage:
-            result = storage.query_one(sql)
+            result = storage.query_one(sql, (subset_id))
             if result == None:
                 return None
             else:
@@ -61,9 +55,9 @@ class SubsetDao(Dao):
 
     def query_by_page(self, page: int, limit: int) -> List[SubsetModel]:
         offset: int = (page - 1) * limit
-        sql: str = "SELECT * FROM %s LIMIT %s, %s" % (self.table_name, offset, limit)
+        sql: str = f"SELECT * FROM {self.table_name} LIMIT %s, %s"
         with Storage() as storage:
-            results = storage.query_all(sql)
+            results = storage.query_all(sql, (offset, limit))
             return [
                 SubsetModel(
                     subset_id=int(item["subset_id"]),
@@ -75,7 +69,7 @@ class SubsetDao(Dao):
             ]
 
     def query_all(self) -> List[SubsetModel]:
-        sql: str = "SELECT * FROM `%s`" % self.table_name
+        sql: str = f"SELECT * FROM `{self.table_name}`"
         with Storage() as storage:
             results = storage.query_all(sql)
             return [

@@ -4,8 +4,7 @@ from src.utils.storage import Storage
 from src.model import UserModel
 from src.utils.logger import Logger
 
-# table_name: str = "user"
-# primary_key_name: str = "user_id"
+
 logger = Logger(__name__)
 
 
@@ -17,34 +16,30 @@ class UserDao(Dao):
     def add(
         self, user_name: str, nick_name: str, password: str, avatar_src: str
     ) -> bool:
-        sql: str = f"""INSERT INTO `{self.table_name}`
+        sql: str = (
+            f"""INSERT INTO `{self.table_name}`
                     (user_name, nick_name, password, avatar_src, create_time)
                     VALUES
-                    ('{user_name}', '{nick_name}', '{password}', '{avatar_src}', NOW() )"""
+                    ('%s', '%s', '%s', '%s', NOW() )"""
+        )
         with Storage() as storage:
-            storage.save(sql)
+            storage.save(sql, (user_name, nick_name, password, avatar_src))
             return True
         return False
 
     def update(self, user_id: int, new_hashed_password: str) -> bool:
         sql: str = (
-            """UPDATE `%s`
-                        SET password = '%s'
-                        WHERE user_id = '%s'"""
-            % (self.table_name, new_hashed_password, user_id)
+            f"""UPDATE `{self.table_name}` SET password = '%s' WHERE user_id = '%s'"""
         )
         with Storage() as storage:
-            storage.update(sql)
+            storage.update(sql, (new_hashed_password, user_id))
             return True
         return False
 
     def query_one(self, user_id: int) -> UserModel | None:
-        sql: str = "SELECT * FROM `%s` WHERE `user_id` = %s" % (
-            self.table_name,
-            user_id,
-        )
+        sql: str = f"SELECT * FROM `{self.table_name}` WHERE `user_id` = %s"
         with Storage() as storage:
-            result = storage.query_one(sql)
+            result = storage.query_one(sql, (user_id,))
             if result == None:
                 return None
             else:
@@ -59,9 +54,9 @@ class UserDao(Dao):
 
     def query_by_page(self, page: int, limit: int) -> List[UserModel]:
         offset: int = (page - 1) * limit
-        sql: str = "SELECT * FROM %s LIMIT %s, %s" % (self.table_name, offset, limit)
+        sql: str = f"SELECT * FROM `{self.table_name}` LIMIT %s, %s"
         with Storage() as storage:
-            results = storage.query_all(sql)
+            results = storage.query_all(sql, (offset, limit))
             return [
                 UserModel(
                     user_id=int(item["user_id"]),
@@ -75,7 +70,7 @@ class UserDao(Dao):
             ]
 
     def query_all(self) -> List[UserModel]:
-        sql: str = "SELECT * FROM `%s`" % (self.table_name)
+        sql: str = f"SELECT * FROM `{self.table_name}`"
         with Storage() as storage:
             results = storage.query_all(sql)
             return [

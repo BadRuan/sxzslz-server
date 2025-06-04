@@ -10,27 +10,27 @@ class Storage:
     def __init__(self):
         self.conn = None
 
-    def _execute(self, sql: str):
+    def _execute(self, sql: str, args: tuple = None):
         cursor = self.conn.cursor()
         cursor.execute("SET time_zone= 'Asia/Shanghai';")  # 解决时区不一致问题
-        cursor.execute(sql)
+        cursor.execute(sql, args)
         return cursor
 
-    def query_one(self, sql: str):
-        return self._execute(sql).fetchone()
+    def query_one(self, sql: str, args: tuple = None):
+        return self._execute(sql, args).fetchone()
 
-    def query_all(self, sql: str):
-        return self._execute(sql).fetchall()
+    def query_all(self, sql: str, args: tuple = None):
+        return self._execute(sql, args).fetchall()
 
-    def save(self, sql: str):
-        self._execute(sql)
+    def save(self, sql: str, args: tuple = None):
+        self._execute(sql, args)
         self.conn.commit()
 
-    def remove(self, sql: str):
-        self.save(sql)
+    def remove(self, sql: str, args: tuple = None):
+        self.save(sql, args)
 
-    def update(self, sql: str):
-        self.save(sql)
+    def update(self, sql: str, args: tuple = None):
+        self.save(sql, args)
 
     def __enter__(self):
         try:

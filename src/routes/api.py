@@ -9,11 +9,9 @@ from src.service.article_service import ArticleService
 
 api_router = APIRouter(tags=["apis"])
 
-# page=2&limit=10
-
 
 @api_router.get("/user", response_model=SuccessResponse, status_code=200)
-async def user(page: int = 1, limit: int = 10):
+async def user(page: int = 1, limit: int = 15):
     try:
         service: Service = UserService()
         return SuccessResponse(
@@ -44,7 +42,7 @@ async def user_item(user_id: int):
 
 
 @api_router.get("/subset", response_model=SuccessResponse, status_code=200)
-async def subset(page: int = 1, limit: int = 10):
+async def subset(page: int = 1, limit: int = 15):
     try:
         service: Service = SubsetService()
         return SuccessResponse(
@@ -75,7 +73,7 @@ async def subset_item(subset_id: int):
 
 
 @api_router.get("/article", response_model=SuccessResponse, status_code=200)
-async def article(page: int = 1, limit: int = 10):
+async def article(page: int = 1, limit: int = 15):
     try:
         service: Service = ArticleService()
         return SuccessResponse(

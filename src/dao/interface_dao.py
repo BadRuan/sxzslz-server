@@ -29,25 +29,27 @@ class Dao(metaclass=ABCMeta):
     def query_all(self) -> List[T]: ...
 
     def remove(self, primary_key_id: int) -> bool:
-        sql: str = "DELETE FROM `%s` WHERE %s = '%s'" % (
-            self.table_name,
-            self.primary_key_name,
-            primary_key_id,
-        )
+        sql: str = f"DELETE FROM `{self.table_name}` WHERE %s = '%s'"
 
         with Storage() as storage:
-            storage.remove(sql)
+            storage.remove(
+                sql,
+                (
+                    self.primary_key_name,
+                    primary_key_id,
+                ),
+            )
             return True
         return False
 
     def count(self) -> int:
-        sql: str = "SELECT COUNT(*) AS 'count' FROM `%s`" % self.table_name
+        sql: str = f"SELECT COUNT(*) AS 'count' FROM `{self.table_name}`"
         with Storage() as storage:
             result = storage.query_one(sql)
             return result["count"]
 
     def pages(self, page_size: int) -> int:
-        sql: str = "SELECT COUNT(*) as 'count' FROM `%s`" % self.table_name
+        sql: str = f"SELECT COUNT(*) as 'count' FROM `{self.table_name}`"
         with Storage() as storage:
             total_records = storage.query_one(sql)
             total_pages: int = (total_records["count"] + page_size - 1) // page_size
