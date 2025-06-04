@@ -24,6 +24,9 @@ class Service(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def query_by_page(self, page: int, limit: int) -> List[T]: ...
+
+    @abstractmethod
     def query_all(self) -> List[T]:
         pass
 

@@ -25,6 +25,9 @@ class UserService(Service):
     def query_one(self, user_id: int) -> UserModel | None:
         return self._dao.query_one(user_id)
 
+    def query_by_page(self, page: int, limit: int) -> List[UserModel]:
+        return self._dao.query_by_page(page, limit)
+
     def query_all(self) -> List[UserModel]:
         return self._dao.query_all()
 

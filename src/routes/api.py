@@ -8,20 +8,22 @@ from src.service.article_service import ArticleService
 
 
 api_router = APIRouter(tags=["apis"])
-limit: int = 10
+
+# page=2&limit=10
 
 
 @api_router.get("/user", response_model=SuccessResponse, status_code=200)
-async def user():
+async def user(page: int = 1, limit: int = 10):
     try:
         service: Service = UserService()
         return SuccessResponse(
-            data=service.query_all(),
+            data=service.query_by_page(page, limit),
             meta={
                 "info": "success",
                 "pagination": {
                     "total": service.count(),
                     "totalPages": service.pages(limit),
+                    "page": page,
                     "limit": limit,
                 },
             },
@@ -42,16 +44,17 @@ async def user_item(user_id: int):
 
 
 @api_router.get("/subset", response_model=SuccessResponse, status_code=200)
-async def subset():
+async def subset(page: int = 1, limit: int = 10):
     try:
         service: Service = SubsetService()
         return SuccessResponse(
-            data=service.query_all(),
+            data=service.query_by_page(page, limit),
             meta={
                 "info": "success",
                 "pagination": {
                     "total": service.count(),
                     "totalPages": service.pages(limit),
+                    "page": page,
                     "limit": limit,
                 },
             },
@@ -72,16 +75,17 @@ async def subset_item(subset_id: int):
 
 
 @api_router.get("/article", response_model=SuccessResponse, status_code=200)
-async def article():
+async def article(page: int = 1, limit: int = 10):
     try:
         service: Service = ArticleService()
         return SuccessResponse(
-            data=service.query_all(),
+            data=service.query_by_page(page, limit),
             meta={
                 "info": "success",
                 "pagination": {
                     "total": service.count(),
                     "totalPages": service.pages(limit),
+                    "page": page,
                     "limit": limit,
                 },
             },

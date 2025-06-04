@@ -28,6 +28,9 @@ class SubsetService(Service):
     def query_one(self, subset_id: int) -> SubsetModel | None:
         return self._dao.query_one(subset_id)
 
+    def query_by_page(self, page: int, limit: int) -> List[SubsetModel]:
+        return self._dao.query_by_page(page, limit)
+
     def query_all(self) -> List[SubsetModel]:
         return self._dao.query_all()
 
