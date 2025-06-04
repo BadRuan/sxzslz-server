@@ -12,18 +12,19 @@ class TestArticle:
     #     dao: Dao = ArticleDao()
     #     dao.add(
     #         user_id=1,
-    #         title="测试文件发布5",
-    #         content="测试内容333",
+    #         title="测试文件发布9",
+    #         content="3测试内容测试内容测试内容测试内容33",
     #         img_src="http://badruan.onlin1e",
     #         state=False,
     #     )
     #     dao.add(
     #         user_id=1,
-    #         title="测试文件发布6",
-    #         content="测试内容4444",
+    #         title="测试文件发布10",
+    #         content="测试内容测试内容测试内容测试内容测试内容测试内容",
     #         img_src="http://badruan.onlin1e",
     #         state=True,
     #     )
+
     def test_query_all(self):
         dao: Dao = ArticleDao()
         for i in dao.query_all():

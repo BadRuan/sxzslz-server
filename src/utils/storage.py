@@ -12,6 +12,7 @@ class Storage:
 
     def _execute(self, sql: str):
         cursor = self.conn.cursor()
+        cursor.execute("SET time_zone= 'Asia/Shanghai';")  # 解决时区不一致问题
         cursor.execute(sql)
         return cursor
 
