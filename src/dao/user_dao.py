@@ -27,16 +27,22 @@ class UserDao(Dao):
         return False
 
     def update(self, user_id: int, new_hashed_password: str) -> bool:
-        sql: str = f"""UPDATE `{self.table_name}`
-                        SET password = '{new_hashed_password}'
-                        WHERE user_id = '{user_id}'"""
+        sql: str = (
+            """UPDATE `%s`
+                        SET password = '%s'
+                        WHERE user_id = '%s'"""
+            % (self.table_name, new_hashed_password, user_id)
+        )
         with Storage() as storage:
             storage.update(sql)
             return True
         return False
 
     def query_one(self, user_id: int) -> UserModel | None:
-        sql: str = f"SELECT * FROM `{self.table_name}` WHERE `user_id` = {user_id}"
+        sql: str = "SELECT * FROM `%s` WHERE `user_id` = %s" % (
+            self.table_name,
+            user_id,
+        )
         with Storage() as storage:
             result = storage.query_one(sql)
             if result == None:
@@ -69,7 +75,7 @@ class UserDao(Dao):
             ]
 
     def query_all(self) -> List[UserModel]:
-        sql: str = f"SELECT * FROM `{self.table_name}`"
+        sql: str = "SELECT * FROM `%s`" % (self.table_name)
         with Storage() as storage:
             results = storage.query_all(sql)
             return [

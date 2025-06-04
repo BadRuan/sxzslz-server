@@ -38,8 +38,9 @@ class ArticleDao(Dao):
     def update(self, *args, **kwargs) -> bool: ...
 
     def query_one(self, article_id: int) -> ArticleModel | None:
-        sql: str = (
-            f"SELECT * FROM `{self.table_name}` WHERE `article_id` = {article_id}"
+        sql: str = "SELECT * FROM `%s` WHERE `article_id` = %s" % (
+            self.table_name,
+            article_id,
         )
         with Storage() as storage:
             result = storage.query_one(sql)
@@ -77,7 +78,7 @@ class ArticleDao(Dao):
             ]
 
     def query_all(self) -> List[ArticleModel]:
-        sql: str = f"SELECT * FROM `{self.table_name}`"
+        sql: str = "SELECT * FROM `%s`" % (self.table_name)
         with Storage() as storage:
             results = storage.query_all(sql)
             return [

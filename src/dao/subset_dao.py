@@ -31,16 +31,22 @@ class SubsetDao(Dao):
         return False
 
     def update(self, subset_id: int, subset_name: str) -> bool:
-        sql: str = f"""UPDATE `{self.table_name}`
-                        SET subset_name = '{subset_name}'
-                        WHERE subset_id = '{subset_id}"""
+        sql: str = (
+            """UPDATE `%s`
+                        SET subset_name = '%s'
+                        WHERE subset_id = '%s"""
+            % (self.table_name, subset_name, subset_id)
+        )
         with Storage() as storage:
             storage.update(sql)
             return True
         return False
 
     def query_one(self, subset_id: int) -> SubsetModel | None:
-        sql: str = f"SELECT * FROM `{self.table_name}` WHERE subset_id = '{subset_id}'"
+        sql: str = f"SELECT * FROM `%s` WHERE subset_id = '%s'" % (
+            self.table_name,
+            subset_id,
+        )
         with Storage() as storage:
             result = storage.query_one(sql)
             if result == None:
@@ -69,7 +75,7 @@ class SubsetDao(Dao):
             ]
 
     def query_all(self) -> List[SubsetModel]:
-        sql: str = f"SELECT * FROM `{self.table_name}`"
+        sql: str = "SELECT * FROM `%s`" % self.table_name
         with Storage() as storage:
             results = storage.query_all(sql)
             return [
