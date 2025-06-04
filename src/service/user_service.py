@@ -30,3 +30,6 @@ class UserService(Service):
 
     def count(self) -> int:
         return self._dao.count()
+
+    def pages(self, page_size: int = 10) -> int:
+        return self._dao.pages(page_size)

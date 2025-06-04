@@ -8,13 +8,22 @@ from src.service.article_service import ArticleService
 
 
 api_router = APIRouter(tags=["apis"])
+page_size: int = 10
 
 
 @api_router.get("/user", response_model=SuccessResponse, status_code=200)
 async def user():
     try:
         service: Service = UserService()
-        return SuccessResponse(data=service.query_all(), meta={"info": "success"})
+        return SuccessResponse(
+            data=service.query_all(),
+            meta={
+                "info": "success",
+                "count": service.count(),
+                "pages": service.pages(page_size),
+                "page_size": page_size,
+            },
+        )
     except NotFoundException as e:
         raise HTTPException(status_code=404, detail=e.json())
 
@@ -34,7 +43,15 @@ async def user_item(user_id: int):
 async def subset():
     try:
         service: Service = SubsetService()
-        return SuccessResponse(data=service.query_all(), meta={"info": "success"})
+        return SuccessResponse(
+            data=service.query_all(),
+            meta={
+                "info": "success",
+                "count": service.count(),
+                "pages": service.pages(page_size),
+                "page_size": page_size,
+            },
+        )
     except NotFoundException as e:
         raise HTTPException(status_code=404, detail=e.json())
 
@@ -54,7 +71,15 @@ async def subset_item(subset_id: int):
 async def article():
     try:
         service: Service = ArticleService()
-        return SuccessResponse(data=service.query_all(), meta={"info": "success"})
+        return SuccessResponse(
+            data=service.query_all(),
+            meta={
+                "info": "success",
+                "count": service.count(),
+                "pages": service.pages(page_size),
+                "page_size": page_size,
+            },
+        )
     except NotFoundException as e:
         raise HTTPException(status_code=404, detail=e.json())
 

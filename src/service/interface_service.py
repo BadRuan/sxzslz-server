@@ -30,3 +30,7 @@ class Service(metaclass=ABCMeta):
     @abstractmethod
     def count(self) -> int:
         pass
+
+    @abstractmethod
+    def pages(self, page_size: int) -> int:
+        pass
