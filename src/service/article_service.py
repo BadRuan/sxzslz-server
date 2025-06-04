@@ -35,6 +35,9 @@ class ArticleService(Service):
     def query_one(self, article_id: int) -> ArticleModel | None:
         return self._dao.query_one(article_id)
 
+    def query_by_page(self, page: int, limit: int) -> List[ArticleModel]:
+        return self._dao.query_by_page(page, limit)
+
     def query_all(self) -> List[ArticleModel]:
         return self._dao.query_all()
 

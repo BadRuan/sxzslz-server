@@ -23,6 +23,9 @@ class Dao(metaclass=ABCMeta):
     def query_one(self, *args, **kwargs) -> T | None: ...
 
     @abstractmethod
+    def query_by_page(self, page: int, limit: int) -> List[T]: ...
+
+    @abstractmethod
     def query_all(self) -> List[T]: ...
 
     def remove(self, primary_key_id: int) -> bool:

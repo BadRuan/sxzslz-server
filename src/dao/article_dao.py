@@ -57,6 +57,25 @@ class ArticleDao(Dao):
                     read_count=int(result["read_count"]),
                 )
 
+    def query_by_page(self, page: int, limit: int) -> List[ArticleModel]:
+        offset: int = (page - 1) * limit
+        sql: str = "SELECT * FROM %s LIMIT %s, %s" % (self.table_name, offset, limit)
+        with Storage() as storage:
+            results = storage.query_all(sql)
+            return [
+                ArticleModel(
+                    article_id=int(item["article_id"]),
+                    subset_id=int(item["subset_id"]),
+                    user_id=int(item["user_id"]),
+                    title=item["title"],
+                    content=item["content"],
+                    state=bool(item["state"]),
+                    create_time=item["create_time"],
+                    read_count=int(item["read_count"]),
+                )
+                for item in results
+            ]
+
     def query_all(self) -> List[ArticleModel]:
         sql: str = f"SELECT * FROM `{self.table_name}`"
         with Storage() as storage:

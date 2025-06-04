@@ -51,6 +51,23 @@ class UserDao(Dao):
                     create_time=result["create_time"],
                 )
 
+    def query_by_page(self, page: int, limit: int) -> List[UserModel]:
+        offset: int = (page - 1) * limit
+        sql: str = "SELECT * FROM %s LIMIT %s, %s" % (self.table_name, offset, limit)
+        with Storage() as storage:
+            results = storage.query_all(sql)
+            return [
+                UserModel(
+                    user_id=int(item["user_id"]),
+                    user_name=item["user_name"],
+                    nick_name=item["nick_name"],
+                    password=item["password"],
+                    avatar_src=item["avatar_src"],
+                    create_time=item["create_time"],
+                )
+                for item in results
+            ]
+
     def query_all(self) -> List[UserModel]:
         sql: str = f"SELECT * FROM `{self.table_name}`"
         with Storage() as storage:
