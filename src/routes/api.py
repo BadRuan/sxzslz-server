@@ -8,7 +8,7 @@ from src.service.article_service import ArticleService
 
 
 api_router = APIRouter(tags=["apis"])
-page_size: int = 10
+limit: int = 10
 
 
 @api_router.get("/user", response_model=SuccessResponse, status_code=200)
@@ -19,9 +19,11 @@ async def user():
             data=service.query_all(),
             meta={
                 "info": "success",
-                "count": service.count(),
-                "pages": service.pages(page_size),
-                "page_size": page_size,
+                "pagination": {
+                    "total": service.count(),
+                    "totalPages": service.pages(limit),
+                    "limit": limit,
+                },
             },
         )
     except NotFoundException as e:
@@ -47,9 +49,11 @@ async def subset():
             data=service.query_all(),
             meta={
                 "info": "success",
-                "count": service.count(),
-                "pages": service.pages(page_size),
-                "page_size": page_size,
+                "pagination": {
+                    "total": service.count(),
+                    "totalPages": service.pages(limit),
+                    "limit": limit,
+                },
             },
         )
     except NotFoundException as e:
@@ -75,9 +79,11 @@ async def article():
             data=service.query_all(),
             meta={
                 "info": "success",
-                "count": service.count(),
-                "pages": service.pages(page_size),
-                "page_size": page_size,
+                "pagination": {
+                    "total": service.count(),
+                    "totalPages": service.pages(limit),
+                    "limit": limit,
+                },
             },
         )
     except NotFoundException as e:
