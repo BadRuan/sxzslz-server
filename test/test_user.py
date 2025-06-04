@@ -21,5 +21,4 @@ class TestUser:
     def test_dao_query_one(self):
         dao: Dao = UserDao()
         count: int = dao.count()
-        logger.debug(dao.query_one(1))
         assert None == dao.query_one(count + 10)

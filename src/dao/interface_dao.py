@@ -1,17 +1,20 @@
 from abc import ABCMeta
 from abc import abstractmethod
 from typing import List, TypeVar
+from src.utils.storage import Storage
+
 
 T = TypeVar("T")
 
 
 class Dao(metaclass=ABCMeta):
 
-    @abstractmethod
-    def add(self, *args, **kwargs) -> bool: ...
+    def __init__(self, table_name: str, primary_key_name: str):
+        self.table_name: str = table_name
+        self.primary_key_name: str = primary_key_name
 
     @abstractmethod
-    def remove(self, *args, **kwargs) -> bool: ...
+    def add(self, *args, **kwargs) -> bool: ...
 
     @abstractmethod
     def update(self, *args, **kwargs) -> bool: ...
@@ -22,5 +25,17 @@ class Dao(metaclass=ABCMeta):
     @abstractmethod
     def query_all(self) -> List[T]: ...
 
-    @abstractmethod
-    def count(self) -> int: ...
+    def remove(self, primary_key_id: int) -> bool:
+        sql: str = (
+            f"DELETE FROM `{self.table_name}` WHERE {self.primary_key_name} = '{primary_key_id}'"
+        )
+        with Storage() as storage:
+            storage.remove(sql)
+            return True
+        return False
+
+    def count(self) -> int:
+        sql: str = f"SELECT COUNT(*) AS 'count' FROM `{self.table_name}`"
+        with Storage() as storage:
+            result = storage.query_one(sql)
+            return result["count"]

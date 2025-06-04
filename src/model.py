@@ -32,3 +32,13 @@ class SubsetModel(BaseModel):
     subset_name: str
     subset_type: SubsetType
     create_time: datetime
+
+
+class ArticleModel(BaseModel):
+    article_id: int
+    user_id: int
+    title: str
+    content: str
+    state: bool
+    create_time: datetime
+    read_count: int

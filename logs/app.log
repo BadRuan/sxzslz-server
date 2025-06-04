@@ -1,0 +1,25 @@
+2025-06-04 16:05:01,633 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,633 | test.test_article    | DEBUG    | Article: article_id=1 user_id=1 title='测试文件发布2' content='测试内容' state=False create_time=datetime.datetime(2025, 6, 4, 7, 51, 26) read_count=0
+2025-06-04 16:05:01,633 | test.test_article    | DEBUG    | Article: article_id=2 user_id=1 title='测试文件发布1' content='测试内容1' state=False create_time=datetime.datetime(2025, 6, 4, 7, 54, 8) read_count=0
+2025-06-04 16:05:01,634 | test.test_article    | DEBUG    | Article: article_id=3 user_id=1 title='测试文件发布3' content='测试内容333' state=False create_time=datetime.datetime(2025, 6, 4, 7, 58, 57) read_count=0
+2025-06-04 16:05:01,634 | test.test_article    | DEBUG    | Article: article_id=4 user_id=1 title='测试文件发布4' content='测试内容4444' state=True create_time=datetime.datetime(2025, 6, 4, 7, 58, 57) read_count=0
+2025-06-04 16:05:01,634 | test.test_article    | DEBUG    | Article: article_id=5 user_id=1 title='测试文件发布5' content='测试内容333' state=False create_time=datetime.datetime(2025, 6, 4, 7, 59, 23) read_count=0
+2025-06-04 16:05:01,634 | test.test_article    | DEBUG    | Article: article_id=6 user_id=1 title='测试文件发布6' content='测试内容4444' state=True create_time=datetime.datetime(2025, 6, 4, 7, 59, 23) read_count=0
+2025-06-04 16:05:01,637 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,641 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,645 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,654 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,659 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,661 | test.test_inidatabase | DEBUG    | 执行 init_database 函数
+2025-06-04 16:05:01,664 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,675 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,679 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,684 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,688 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,691 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,695 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,701 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,705 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,708 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,712 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
+2025-06-04 16:05:01,716 | src.utils.storage    | DEBUG    | MySQL数据库连接成功
