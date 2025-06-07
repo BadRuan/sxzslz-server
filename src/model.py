@@ -39,7 +39,14 @@ class ArticleModel(BaseModel):
     user_id: int
     subset_id: int
     title: str
-    content: str
+    content: str | None
     state: bool
     create_time: datetime
     read_count: int
+
+
+class Pagination(BaseModel):
+    total_count: int
+    total_pages: int
+    current_page: int
+    limit_count: int
