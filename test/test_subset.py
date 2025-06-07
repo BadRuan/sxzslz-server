@@ -1,6 +1,6 @@
 from typing import List
 from src.utils.logger import Logger
-from src.model import SubsetModel
+from src.model import Subset
 from src.dao.interface_dao import Dao
 from src.dao.subset_dao import SubsetDao
 from src.service.interface_service import Service
@@ -26,5 +26,5 @@ class TestSubset:
     def test_dao_query_by_page(self):
         dao: Dao = SubsetDao()
         page, limit = 1, 10
-        results: List[SubsetModel] = dao.query_by_page(page, limit)
+        results: List[Subset] = dao.query_by_page(page, limit)
         assert len(results) > 0

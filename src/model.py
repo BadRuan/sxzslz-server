@@ -11,7 +11,7 @@ class DatabaseConfig(BaseModel):
     database: str
 
 
-class UserModel(BaseModel):
+class User(BaseModel):
     user_id: int
     user_name: str
     nick_name: str
@@ -27,14 +27,14 @@ class SubsetType(Enum):
     File = 2  # 文件
 
 
-class SubsetModel(BaseModel):
+class Subset(BaseModel):
     subset_id: int
     subset_name: str
     subset_type: SubsetType
     create_time: datetime
 
 
-class ArticleModel(BaseModel):
+class Article(BaseModel):
     article_id: int
     user_id: int
     subset_id: int

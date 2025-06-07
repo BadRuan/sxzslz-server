@@ -1,7 +1,7 @@
 from typing import List
 from src.utils.storage import Storage
 from src.dao.interface_dao import Dao
-from src.model import SubsetType, SubsetModel
+from src.model import SubsetType, Subset
 
 
 table_name: str = "subset"
@@ -39,27 +39,27 @@ class SubsetDao(Dao):
             return True
         return False
 
-    def query_one(self, subset_id: int) -> SubsetModel | None:
+    def query_one(self, subset_id: int) -> Subset | None:
         sql: str = f"SELECT * FROM `{self.table_name}` WHERE subset_id = '%s'"
         with Storage() as storage:
             result = storage.query_one(sql, (subset_id))
             if result == None:
                 return None
             else:
-                return SubsetModel(
+                return Subset(
                     subset_id=int(result["subset_id"]),
                     subset_name=result["subset_name"],
                     subset_type=SubsetType(result["subset_type"]),
                     create_time=result["create_time"],
                 )
 
-    def query_by_page(self, page: int, limit: int) -> List[SubsetModel]:
+    def query_by_page(self, page: int, limit: int) -> List[Subset]:
         offset: int = (page - 1) * limit
         sql: str = f"SELECT * FROM {self.table_name} LIMIT %s, %s"
         with Storage() as storage:
             results = storage.query_all(sql, (offset, limit))
             return [
-                SubsetModel(
+                Subset(
                     subset_id=int(item["subset_id"]),
                     subset_name=item["subset_name"],
                     subset_type=SubsetType(item["subset_type"]),
@@ -68,12 +68,12 @@ class SubsetDao(Dao):
                 for item in results
             ]
 
-    def query_all(self) -> List[SubsetModel]:
+    def query_all(self) -> List[Subset]:
         sql: str = f"SELECT * FROM `{self.table_name}`"
         with Storage() as storage:
             results = storage.query_all(sql)
             return [
-                SubsetModel(
+                Subset(
                     subset_id=int(item["subset_id"]),
                     subset_name=item["subset_name"],
                     subset_type=SubsetType(item["subset_type"]),

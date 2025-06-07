@@ -2,7 +2,7 @@ from typing import List
 from src.utils.logger import Logger
 from src.dao.interface_dao import Dao
 from src.utils.storage import Storage
-from src.model import ArticleModel
+from src.model import Article
 
 
 table_name: str = "article"
@@ -24,12 +24,9 @@ class ArticleDao(Dao):
         img_src: str,
         state: bool,
     ) -> bool:
-        sql: str = f"""INSERT INTO `{self.table_name}` (
-                        subset_id, user_id, title, content, img_src, state, create_time
-                        ) VALUES (
-                        '%s', '%s', '%s', '%s', '%s', %s, now()
-                        )"""
-        logger.debug(f"Article Add SQL: {sql}")
+        sql: str = f"""INSERT INTO `{self.table_name}`
+                    (subset_id, user_id, title, content, img_src, state) 
+                    VALUES ( '%s', '%s', '%s', '%s', '%s', %s)"""
         with Storage() as storage:
             storage.save(sql, (subset_id, user_id, title, content, img_src, state))
             return True
@@ -37,14 +34,14 @@ class ArticleDao(Dao):
 
     def update(self, *args, **kwargs) -> bool: ...
 
-    def query_one(self, article_id: int) -> ArticleModel | None:
+    def query_one(self, article_id: int) -> Article | None:
         sql: str = f"SELECT * FROM `{self.table_name}` WHERE `article_id` = %s"
         with Storage() as storage:
             result = storage.query_one(sql, (article_id,))
             if result == None:
                 return None
             else:
-                return ArticleModel(
+                return Article(
                     article_id=int(result["article_id"]),
                     subset_id=int(result["subset_id"]),
                     user_id=int(result["user_id"]),
@@ -55,13 +52,13 @@ class ArticleDao(Dao):
                     read_count=int(result["read_count"]),
                 )
 
-    def query_by_page(self, page: int, limit: int) -> List[ArticleModel]:
+    def query_by_page(self, page: int, limit: int) -> List[Article]:
         offset: int = (page - 1) * limit
         sql: str = f"SELECT * FROM `{self.table_name}` LIMIT %s, %s"
         with Storage() as storage:
             results = storage.query_all(sql, (offset, limit))
             return [
-                ArticleModel(
+                Article(
                     article_id=int(item["article_id"]),
                     subset_id=int(item["subset_id"]),
                     user_id=int(item["user_id"]),
@@ -75,12 +72,12 @@ class ArticleDao(Dao):
                 for item in results
             ]
 
-    def query_all(self) -> List[ArticleModel]:
+    def query_all(self) -> List[Article]:
         sql: str = f"SELECT * FROM `{self.table_name}`"
         with Storage() as storage:
             results = storage.query_all(sql)
             return [
-                ArticleModel(
+                Article(
                     article_id=int(item["article_id"]),
                     subset_id=int(item["subset_id"]),
                     user_id=int(item["user_id"]),

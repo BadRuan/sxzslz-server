@@ -3,7 +3,7 @@ from src.utils.logger import Logger
 from src.service.interface_service import Service
 from src.dao.interface_dao import Dao
 from src.dao.article_dao import ArticleDao
-from src.model import ArticleModel
+from src.model import Article
 
 
 logger = Logger(__name__)
@@ -32,13 +32,13 @@ class ArticleService(Service):
     def remove(self, article_id: int) -> bool:
         return self._dao.remove(article_id)
 
-    def query_one(self, article_id: int) -> ArticleModel | None:
+    def query_one(self, article_id: int) -> Article | None:
         return self._dao.query_one(article_id)
 
-    def query_by_page(self, page: int, limit: int = 10) -> List[ArticleModel]:
+    def query_by_page(self, page: int, limit: int = 10) -> List[Article]:
         return self._dao.query_by_page(page, limit)
 
-    def query_all(self) -> List[ArticleModel]:
+    def query_all(self) -> List[Article]:
         return self._dao.query_all()
 
     def count(self) -> int:

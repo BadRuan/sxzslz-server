@@ -1,6 +1,6 @@
 from typing import List
 from src.utils.logger import Logger
-from src.model import ArticleModel
+from src.model import Article
 from src.dao.interface_dao import Dao
 from src.dao.article_dao import ArticleDao
 from src.service.interface_service import Service
@@ -42,5 +42,5 @@ class TestArticle:
     def test_query_by_page(self):
         dao: Dao = ArticleDao()
         page, limit = 2, 10
-        results: List[ArticleModel] = dao.query_by_page(page, limit)
+        results: List[Article] = dao.query_by_page(page, limit)
         assert len(results) > 0
