@@ -38,6 +38,11 @@ class ArticleService(Service):
     def query_by_page(self, page: int, limit: int = 10) -> List[Article]:
         return self._dao.query_by_page(page, limit)
 
+    def query_by_condition(
+        self, state: bool, page: int, limit: int = 10
+    ) -> List[Article]:
+        return self._dao.query_by_condition(state, page, limit)
+
     def query_all(self) -> List[Article]:
         return self._dao.query_all()
 

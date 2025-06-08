@@ -2,7 +2,7 @@ from typing import List
 from src.utils.logger import Logger
 from src.dao.interface_dao import Dao
 from src.utils.storage import Storage
-from src.model import Article
+from src.model import Article, SubsetType
 
 
 table_name: str = "article"
@@ -55,6 +55,28 @@ class ArticleDao(Dao):
     def query_by_page(self, page: int, limit: int) -> List[Article]:
         offset: int = (page - 1) * limit
         sql: str = f"SELECT * FROM `{self.table_name}` LIMIT %s, %s"
+        with Storage() as storage:
+            results = storage.query_all(sql, (offset, limit))
+            return [
+                Article(
+                    article_id=int(item["article_id"]),
+                    subset_id=int(item["subset_id"]),
+                    user_id=int(item["user_id"]),
+                    title=item["title"],
+                    # content=item["content"],
+                    content=None,
+                    state=bool(item["state"]),
+                    create_time=item["create_time"],
+                    read_count=int(item["read_count"]),
+                )
+                for item in results
+            ]
+
+    def query_by_condition(self, state: bool, page: int, limit: int) -> List[Article]:
+        offset: int = (page - 1) * limit
+        sql: str = (
+            f"SELECT * FROM `{self.table_name}` WHERE `state`={state} LIMIT %s, %s"
+        )
         with Storage() as storage:
             results = storage.query_all(sql, (offset, limit))
             return [

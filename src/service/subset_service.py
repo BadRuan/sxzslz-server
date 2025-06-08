@@ -31,6 +31,11 @@ class SubsetService(Service):
     def query_by_page(self, page: int, limit: int) -> List[Subset]:
         return self._dao.query_by_page(page, limit)
 
+    def query_by_condition(
+        self, subset_type: SubsetType, page: int, limit: int
+    ) -> List[Subset]:
+        return self._dao.query_by_condition(subset_type, page, limit)
+
     def query_all(self) -> List[Subset]:
         return self._dao.query_all()
 

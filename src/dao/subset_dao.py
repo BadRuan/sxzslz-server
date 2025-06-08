@@ -81,3 +81,22 @@ class SubsetDao(Dao):
                 )
                 for item in results
             ]
+
+    def query_by_condition(
+        self, subset_type: SubsetType, page: int, limit: int
+    ) -> List[Subset]:
+        offset: int = (page - 1) * limit
+        sql: str = (
+            f"SELECT * FROM `{self.table_name}` WHERE `subset_type`={subset_type.value}  LIMIT %s, %s"
+        )
+        with Storage() as storage:
+            results = storage.query_all(sql, (offset, limit))
+            return [
+                Subset(
+                    subset_id=int(item["subset_id"]),
+                    subset_name=item["subset_name"],
+                    subset_type=SubsetType(item["subset_type"]),
+                    create_time=item["create_time"],
+                )
+                for item in results
+            ]

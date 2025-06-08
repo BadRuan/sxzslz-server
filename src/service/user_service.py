@@ -28,6 +28,9 @@ class UserService(Service):
     def query_by_page(self, page: int, limit: int) -> List[User]:
         return self._dao.query_by_page(page, limit)
 
+    def query_by_condition(self, condition, page: int, limit: int) -> List[User]:
+        return self._dao.query_by_page(page, limit)
+
     def query_all(self) -> List[User]:
         return self._dao.query_all()
 

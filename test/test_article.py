@@ -44,3 +44,12 @@ class TestArticle:
         page, limit = 2, 10
         results: List[Article] = dao.query_by_page(page, limit)
         assert len(results) > 0
+
+    def test_query_by_conditon(self):
+        dao: Dao = ArticleDao()
+        service: Service = ArticleService()
+        page, limit = 2, 10
+        results1: List[Article] = dao.query_by_condition(True, page, limit)
+        results2: List[Article] = service.query_by_condition(True, page, limit)
+        assert len(results1) > 0
+        assert len(results2) > 0
