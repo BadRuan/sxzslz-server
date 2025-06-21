@@ -1,7 +1,7 @@
 from typing import List
 from src.dao.interface_dao import Dao
 from src.utils.storage import Storage
-from src.model import User
+from src.model import User, QueryCondition
 from src.utils.logger import Logger
 
 
@@ -18,9 +18,9 @@ class UserDao(Dao):
     ) -> bool:
         sql: str = (
             f"""INSERT INTO `{self.table_name}`
-                    (user_name, nick_name, password, avatar_src, create_time)
+                    (user_name, nick_name, password, avatar_src)
                     VALUES
-                    ('%s', '%s', '%s', '%s', NOW() )"""
+                    ('%s', '%s', '%s', '%s')"""
         )
         with Storage() as storage:
             storage.save(sql, (user_name, nick_name, password, avatar_src))
@@ -28,13 +28,7 @@ class UserDao(Dao):
         return False
 
     def update(self, user_id: int, new_hashed_password: str) -> bool:
-        sql: str = (
-            f"""UPDATE `{self.table_name}` SET password = '%s' WHERE user_id = '%s'"""
-        )
-        with Storage() as storage:
-            storage.update(sql, (new_hashed_password, user_id))
-            return True
-        return False
+        pass
 
     def query_one(self, user_id: int) -> User | None:
         sql: str = f"SELECT * FROM `{self.table_name}` WHERE `user_id` = %s"
@@ -52,44 +46,11 @@ class UserDao(Dao):
                     create_time=result["create_time"],
                 )
 
-    def query_by_page(self, page: int, limit: int) -> List[User]:
-        offset: int = (page - 1) * limit
+    def query_by_condition(self, query_condition: QueryCondition) -> List[User]:
+        offset: int = (query_condition.page - 1) * query_condition.limit
         sql: str = f"SELECT * FROM `{self.table_name}` LIMIT %s, %s"
         with Storage() as storage:
-            results = storage.query_all(sql, (offset, limit))
-            return [
-                User(
-                    user_id=int(item["user_id"]),
-                    user_name=item["user_name"],
-                    nick_name=item["nick_name"],
-                    password=item["password"],
-                    avatar_src=item["avatar_src"],
-                    create_time=item["create_time"],
-                )
-                for item in results
-            ]
-
-    def query_by_condition(self, condition, page: int, limit: int) -> List[User]:
-        offset: int = (page - 1) * limit
-        sql: str = f"SELECT * FROM `{self.table_name}` LIMIT %s, %s"
-        with Storage() as storage:
-            results = storage.query_all(sql, (offset, limit))
-            return [
-                User(
-                    user_id=int(item["user_id"]),
-                    user_name=item["user_name"],
-                    nick_name=item["nick_name"],
-                    password=item["password"],
-                    avatar_src=item["avatar_src"],
-                    create_time=item["create_time"],
-                )
-                for item in results
-            ]
-
-    def query_all(self) -> List[User]:
-        sql: str = f"SELECT * FROM `{self.table_name}`"
-        with Storage() as storage:
-            results = storage.query_all(sql)
+            results = storage.query_all(sql, (offset, query_condition.limit))
             return [
                 User(
                     user_id=int(item["user_id"]),

@@ -1,6 +1,7 @@
 from abc import ABCMeta
 from abc import abstractmethod
 from typing import List, TypeVar
+from src.model import QueryCondition
 
 T = TypeVar("T")
 
@@ -24,14 +25,7 @@ class Service(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def query_by_page(self, page: int, limit: int) -> List[T]: ...
-
-    @abstractmethod
-    def query_by_condition(self, condition: T, page: int, limit: int) -> List[T]: ...
-
-    @abstractmethod
-    def query_all(self) -> List[T]:
-        pass
+    def query_by_condition(self, query_condition: QueryCondition) -> List[T]: ...
 
     @abstractmethod
     def count(self) -> int:

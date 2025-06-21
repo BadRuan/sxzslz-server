@@ -3,7 +3,7 @@ from src.model import SubsetType
 from src.service.interface_service import Service
 from src.dao.interface_dao import Dao
 from src.dao.subset_dao import SubsetDao
-from src.model import SubsetType, Subset
+from src.model import SubsetType, Subset, QueryCondition
 
 
 class SubsetService(Service):
@@ -28,16 +28,8 @@ class SubsetService(Service):
     def query_one(self, subset_id: int) -> Subset | None:
         return self._dao.query_one(subset_id)
 
-    def query_by_page(self, page: int, limit: int) -> List[Subset]:
-        return self._dao.query_by_page(page, limit)
-
-    def query_by_condition(
-        self, subset_type: SubsetType, page: int, limit: int
-    ) -> List[Subset]:
-        return self._dao.query_by_condition(subset_type, page, limit)
-
-    def query_all(self) -> List[Subset]:
-        return self._dao.query_all()
+    def query_by_condition(self, query_condition: QueryCondition) -> List[Subset]:
+        return self._dao.query_by_condition(query_condition)
 
     def count(self) -> int:
         return self._dao.count()

@@ -1,10 +1,8 @@
 from typing import List
 from src.utils.logger import Logger
-from src.model import Article
+from src.model import Article, QueryCondition
 from src.dao.interface_dao import Dao
 from src.dao.article_dao import ArticleDao
-from src.service.interface_service import Service
-from src.service.article_service import ArticleService
 
 
 logger = Logger(__name__)
@@ -23,9 +21,9 @@ class TestArticle:
     #             img_src="http://badruan.onlin1e",
     #             state=False,
     #         )
-    #     for i in range(1, 10):
+    #     for i in range(10, 40):
     #         dao.add(
-    #             subset_id=1,
+    #             subset_id=2,
     #             user_id=1,
     #             title=f"测试文件草稿{i}",
     #             content="测试内容测试内容测试内容测试内容测试内容测试内容",
@@ -33,23 +31,8 @@ class TestArticle:
     #             state=True,
     #         )
 
-    def test_query_all(self):
-        dao: Dao = ArticleDao()
-        service: Service = ArticleService()
-        assert len(dao.query_all()) == dao.count()
-        assert len(service.query_all()) == service.count()
-
-    def test_query_by_page(self):
-        dao: Dao = ArticleDao()
-        page, limit = 2, 10
-        results: List[Article] = dao.query_by_page(page, limit)
-        assert len(results) > 0
-
     def test_query_by_conditon(self):
         dao: Dao = ArticleDao()
-        service: Service = ArticleService()
-        page, limit = 2, 10
-        results1: List[Article] = dao.query_by_condition(True, page, limit)
-        results2: List[Article] = service.query_by_condition(True, page, limit)
+        query_condition: QueryCondition = QueryCondition(page=1, limit=10, onther=None)
+        results1: List[Article] = dao.query_by_condition(query_condition)
         assert len(results1) > 0
-        assert len(results2) > 0

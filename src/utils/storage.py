@@ -1,6 +1,7 @@
-from src.utils.logger import Logger
-from src.config.configuration import DatabaseConfig, get_database_config
 from pymysql import connect, cursors
+from src.utils.logger import Logger
+from src.model import DatabaseConfig
+from src.config.configuration import get_database_config
 
 
 logger = Logger(__name__)

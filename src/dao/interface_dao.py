@@ -2,6 +2,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 from typing import List, TypeVar
 from src.utils.storage import Storage
+from src.model import QueryCondition
 
 
 T = TypeVar("T")
@@ -23,13 +24,7 @@ class Dao(metaclass=ABCMeta):
     def query_one(self, *args, **kwargs) -> T | None: ...
 
     @abstractmethod
-    def query_by_page(self, page: int, limit: int) -> List[T]: ...
-
-    @abstractmethod
-    def query_by_condition(self, condition: T, page: int, limit: int) -> List[T]: ...
-
-    @abstractmethod
-    def query_all(self) -> List[T]: ...
+    def query_by_condition(self, query_condition: QueryCondition) -> List[T]: ...
 
     def remove(self, primary_key_id: int) -> bool:
         sql: str = f"DELETE FROM `{self.table_name}` WHERE %s = '%s'"

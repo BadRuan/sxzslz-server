@@ -3,7 +3,7 @@ from src.utils.logger import Logger
 from src.service.interface_service import Service
 from src.dao.interface_dao import Dao
 from src.dao.article_dao import ArticleDao
-from src.model import Article
+from src.model import Article, QueryCondition
 
 
 logger = Logger(__name__)
@@ -35,16 +35,8 @@ class ArticleService(Service):
     def query_one(self, article_id: int) -> Article | None:
         return self._dao.query_one(article_id)
 
-    def query_by_page(self, page: int, limit: int = 10) -> List[Article]:
-        return self._dao.query_by_page(page, limit)
-
-    def query_by_condition(
-        self, state: bool, page: int, limit: int = 10
-    ) -> List[Article]:
-        return self._dao.query_by_condition(state, page, limit)
-
-    def query_all(self) -> List[Article]:
-        return self._dao.query_all()
+    def query_by_condition(self, query_condition: QueryCondition) -> List[Article]:
+        return self._dao.query_by_condition(query_condition)
 
     def count(self) -> int:
         return self._dao.count()

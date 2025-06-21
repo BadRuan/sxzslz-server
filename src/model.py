@@ -1,6 +1,6 @@
-from enum import Enum, unique
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Tuple
 
 
 class DatabaseConfig(BaseModel):
@@ -9,6 +9,12 @@ class DatabaseConfig(BaseModel):
     user: str
     password: str
     database: str
+
+
+class QueryCondition(BaseModel):
+    page: int
+    limit: int
+    onther: Tuple | None
 
 
 class User(BaseModel):
@@ -20,17 +26,9 @@ class User(BaseModel):
     create_time: datetime
 
 
-@unique
-class SubsetType(Enum):
-    Article = 0  # 文章
-    Photo = 1  # 图片
-    File = 2  # 文件
-
-
 class Subset(BaseModel):
     subset_id: int
     subset_name: str
-    subset_type: SubsetType
     create_time: datetime
 
 
@@ -38,6 +36,8 @@ class Article(BaseModel):
     article_id: int
     user_id: int
     subset_id: int
+    user_name: str | None
+    subset_name: str | None
     title: str
     content: str | None
     state: bool
