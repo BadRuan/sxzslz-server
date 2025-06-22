@@ -1,5 +1,5 @@
 from typing import List
-from src.dao.interface_dao import Dao
+from src.dao.dao import Dao
 from src.utils.storage import Storage
 from src.model import User, QueryCondition
 from src.utils.logger import Logger

@@ -59,4 +59,4 @@ class TestStorage:
         create_table(tables["user"])
         create_table(tables["subset"])
         create_table(tables["article"])
-        logger.info("创建mysql数据表运行成功")
+        logger.debug("创建数据表SQL语句运行成功")

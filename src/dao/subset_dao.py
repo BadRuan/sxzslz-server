@@ -1,7 +1,7 @@
 from typing import List
 from src.utils.logger import Logger
 from src.utils.storage import Storage
-from src.dao.interface_dao import Dao
+from src.dao.dao import Dao
 from src.model import Subset, QueryCondition
 
 

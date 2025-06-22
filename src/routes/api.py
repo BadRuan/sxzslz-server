@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from src.schemas.response import SuccessResponse
 from src.exceptions.api_exception import NotFoundException, ValidationError
-from src.model import Pagination
-from src.service.interface_service import Service
+from src.model import Pagination, QueryCondition
+from src.service.service import Service
 from src.service.user_service import UserService
 from src.service.subset_service import SubsetService
 from src.service.article_service import ArticleService
@@ -26,12 +26,14 @@ def handle_pagination_request(
     handle_out_of_range_num(page)
     handle_out_of_range_num(limit)
     try:
-        totalPages: int = service.pages(limit)
+        totalPages: int = service.get_pages(limit)
         if page > totalPages:
             page = totalPages
-        count: int = service.count()
+        count: int = service.get_counts()
         return SuccessResponse(
-            data=service.query_by_page(page, limit),
+            data=service.query_by_page(
+                QueryCondition(page=page, limit=limit, onther=None)
+            ),
             meta={
                 "info": "success",
                 "pagination": Pagination(
@@ -46,7 +48,7 @@ def handle_pagination_request(
         raise NotFoundException(detail=e.json())
 
 
-def handle_query_one_request(service: Service, id: int) -> SuccessResponse:
+def handle_query_one_request(service, id: int) -> SuccessResponse:
     handle_out_of_range_num(id)
     try:
         query_result = service.query_one(id)

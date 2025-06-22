@@ -40,13 +40,13 @@ class Dao(metaclass=ABCMeta):
             return True
         return False
 
-    def count(self) -> int:
+    def get_counts(self) -> int:
         sql: str = f"SELECT COUNT(*) AS 'count' FROM `{self.table_name}`"
         with Storage() as storage:
             result = storage.query_one(sql)
             return result["count"]
 
-    def pages(self, page_size: int) -> int:
+    def get_pages(self, page_size: int) -> int:
         sql: str = f"SELECT COUNT(*) as 'count' FROM `{self.table_name}`"
         with Storage() as storage:
             total_records = storage.query_one(sql)

@@ -45,7 +45,6 @@ class Storage:
                 charset="utf8mb4",
                 cursorclass=cursors.DictCursor,
             )
-            logger.debug("MySQL数据库连接成功")
             return self
 
         except Exception:
