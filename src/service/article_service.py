@@ -32,7 +32,7 @@ class ArticleService(Service):
         if article_id <= 0:
             return False
         else:
-            count: int = self.count()
+            count: int = self.get_counts()
             if article_id > count:
                 return False
         return self._dao.remove(article_id)
@@ -41,9 +41,10 @@ class ArticleService(Service):
         if article_id <= 0:
             return False
         else:
-            count: int = self.count()
+            count: int = self.get_counts()
             if article_id > count:
                 return False
+        self._dao.add_read_count(article_id)
         return self._dao.query_one(article_id)
 
     def query_by_page(self, query_condition: QueryCondition) -> List[Article]:

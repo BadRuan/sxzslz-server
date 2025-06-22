@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import Tuple
 
@@ -25,24 +25,33 @@ class User(BaseModel):
     avatar_src: str
     create_time: datetime
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_encoders={datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")},
+    )
+
 
 class Subset(BaseModel):
     subset_id: int
     subset_name: str
-    create_time: datetime
 
 
 class Article(BaseModel):
     article_id: int
     user_id: int
     subset_id: int
-    user_name: str | None
+    nick_name: str | None
     subset_name: str | None
     title: str
     content: str | None
     state: bool
     create_time: datetime
     read_count: int
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_encoders={datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")},
+    )
 
 
 class Pagination(BaseModel):

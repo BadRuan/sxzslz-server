@@ -21,7 +21,7 @@ class SubsetService(Service):
         if subset_id <= 0:
             return False
         else:
-            count: int = self.count()
+            count: int = self.get_counts()
             if subset_id > count:
                 return False
         return self._dao.remove(subset_id)
@@ -30,7 +30,7 @@ class SubsetService(Service):
         if subset_id <= 0:
             return False
         else:
-            count: int = self.count()
+            count: int = self.get_counts()
             if subset_id > count:
                 return False
         return self._dao.update(subset_id, subset_name)
@@ -39,7 +39,7 @@ class SubsetService(Service):
         if subset_id <= 0:
             return None
         else:
-            count: int = self.count()
+            count: int = self.get_counts()
             if subset_id > count:
                 return None
         return self._dao.query_one(subset_id)

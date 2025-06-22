@@ -31,7 +31,7 @@ class UserService(Service):
         if user_id <= 0:
             return False
         else:
-            count: int = self.count()
+            count: int = self.get_counts()
             if user_id > count:
                 return False
         return self._dao.remove(user_id)
@@ -40,7 +40,7 @@ class UserService(Service):
         if user_id <= 0:
             return False
         else:
-            count: int = self.count()
+            count: int = self.get_counts()
             if user_id > count:
                 return False
         return self._dao.update(user_id, new_hashed_password)
@@ -49,7 +49,7 @@ class UserService(Service):
         if user_id <= 0:
             return None
         else:
-            count: int = self.count()
+            count: int = self.get_counts()
             if user_id > count:
                 return None
         return self._dao.query_one(user_id)

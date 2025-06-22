@@ -55,7 +55,7 @@ def handle_query_one_request(service, id: int) -> SuccessResponse:
         if None == query_result:
             raise NotFoundException(status_code=404, detail=f"查找的id:{id} 数据不存在")
         else:
-            return SuccessResponse(data=service.query_one(id), meta={"info": "success"})
+            return SuccessResponse(data=query_result, meta={"info": "success"})
     except NotFoundException as e:
         raise NotFoundException(detail=e.json())
 

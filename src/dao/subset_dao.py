@@ -35,19 +35,17 @@ class SubsetDao(Dao):
                 return Subset(
                     subset_id=int(result["subset_id"]),
                     subset_name=result["subset_name"],
-                    create_time=result["create_time"],
                 )
 
     def query_by_condition(self, query_condition: QueryCondition) -> List[Subset]:
         offset: int = (query_condition.page - 1) * query_condition.limit
-        sql: str = f"SELECT * FROM {self.table_name} LIMIT %s, %s"
+        sql: str = f"SELECT * FROM {self.table_name} ORDER BY subset_id LIMIT %s, %s "
         with Storage() as storage:
             results = storage.query_all(sql, (offset, query_condition.limit))
             return [
                 Subset(
                     subset_id=int(item["subset_id"]),
                     subset_name=item["subset_name"],
-                    create_time=item["create_time"],
                 )
                 for item in results
             ]

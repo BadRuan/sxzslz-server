@@ -54,3 +54,23 @@ class TestArticle:
         results: List[Article] = service.query_by_page(pagination_condition)
         assert len(results) > 0
         logger.debug(f"Service层 Article对象 批量查询文章数据运行成功")
+
+    def test_dao_update(self):
+        dao: Dao = ArticleDao()
+        result = dao.update(
+            2,
+            "沈巷镇水利站文章",
+            '<h2>Hello 沈巷镇水利站</h2><p><br></p><p>这是文章书写<u>测试</u>，主要<span style="color: rgb(231, 95, 51);"><strong>关心</strong></span>后面是否能按<em>预期</em>样式显示内容。</p><p><br></p><ol><li>计划任务1</li><li>计划任务2</li></ol>',
+        )
+        assert result
+
+    def test_add_read_count(self):
+        dao: Dao = ArticleDao()
+        result: bool = dao.add_read_count(1)
+        assert result
+        logger.debug(f"增加文章阅读量")
+
+    def test_dao_query_one(self):
+        dao: Dao = ArticleDao()
+        article: Article = dao.query_one(0)
+        assert None == article

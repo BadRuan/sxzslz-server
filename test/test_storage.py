@@ -19,8 +19,6 @@ tables = {
     "subset": """CREATE TABLE IF NOT EXISTS `subset` (
                     `subset_id` INT NOT NULL AUTO_INCREMENT COMMENT '分类ID（主键）',
                     `subset_name` VARCHAR(50) NOT NULL COMMENT '分类名称（唯一）',
-                    `subset_type` INT NOT NULL DEFAULT '1' COMMENT '所属类型（默认为空）',
-                    `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                     
                     PRIMARY KEY (`subset_id`),
                     UNIQUE KEY  (`subset_name`) 
@@ -34,8 +32,6 @@ tables = {
                     `img_src` VARCHAR(500) DEFAULT '' COMMENT '封面图片地址（默认为空）',
                     `state` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '文章状态：FALSE-未发布，TRUE-已发布',
                     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                    `read_count` INT NOT NULL DEFAULT 0 COMMENT '阅读次数（默认0）',
-                    
                     PRIMARY KEY (`article_id`),
                     FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
                     FOREIGN KEY (`subset_id`) REFERENCES `subset`(`subset_id`) ON DELETE RESTRICT
