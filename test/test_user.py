@@ -1,6 +1,6 @@
 from typing import List
 from src.utils.logger import Logger
-from src.model import User, QueryCondition
+from src.model import User
 from src.dao.dao import Dao
 from src.dao.user_dao import UserDao
 from src.service.service import Service
@@ -12,27 +12,45 @@ logger = Logger(__name__)
 
 class TestUser:
 
-    def test_dao_query_by_page(self):
+    def test_dao_get_pages(self):
         dao: Dao = UserDao()
-        query_condition: QueryCondition = QueryCondition(page=1, limit=20, onther=None)
-        results: List[User] = dao.query_by_condition(query_condition)
-        assert len(results) > 0
-        logger.debug(f"Dao层 User对象  查询用户数据运行成功")
+        limit: int = 10
+        pages: int = dao.get_pages(limit)
+        assert pages > 0
 
-    def test_service_count_and_pages(self):
+    def test_dao_get_counts(self):
+        dao: Dao = UserDao()
+        counts: int = dao.get_counts()
+        assert counts >= 0
+
+    def test_dao_query_one(self):
+        dao: Dao = UserDao()
+        id: int = 1
+        u: User = dao.query_one(id)
+        assert u != None
+
+    def test_dao_query_condition(self):
+        dao: Dao = UserDao()
+        page, limit = 1, 20
+        results: List[User] = dao.query_by_condition(page, limit)
+        assert len(results) > 0
+
+    def test_service_get_counts(self):
         service: Service = UserService()
-        count: int = service.get_counts()
-        pages: int = service.get_pages()
-        logger.debug(f"Service层 User对象 查询用户总数运行成功，共{count}个用户")
+        counts: int = service.get_counts()
+        assert counts >= 0
+
+    def test_service_get_pages(self):
+        service: Service = UserService()
+        limit: int = 10
+        pages: int = service.get_pages(limit)
+        assert pages > 0
 
     def test_service_query_by_page(self):
         service: Service = UserService()
-        pagination_condition: QueryCondition = QueryCondition(
-            page=1, limit=20, onther=None
-        )
-        results: List[User] = service.query_by_page(pagination_condition)
+        page, limit = 1, 20
+        results: List[User] = service.query_by_page(page, limit)
         assert len(results) > 0
-        logger.debug(f"Service层 User对象 批量查询用户数据运行成功")
 
     def test_service_add_user(self):
         service: Service = UserService()

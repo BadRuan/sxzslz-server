@@ -1,7 +1,7 @@
 from typing import List
 from src.dao.dao import Dao
 from src.utils.storage import Storage
-from src.model import User, QueryCondition
+from src.model import User
 from src.utils.logger import Logger
 
 
@@ -17,7 +17,7 @@ class UserDao(Dao):
         self, user_name: str, nick_name: str, password: str, avatar_src: str
     ) -> bool:
         sql: str = (
-            f"""INSERT INTO `{self.table_name}`
+            f"""INSERT INTO {self.table_name}
                     (user_name, nick_name, password, avatar_src)
                     VALUES
                     ('%s', '%s', '%s', '%s')"""
@@ -27,11 +27,10 @@ class UserDao(Dao):
             return True
         return False
 
-    def update(self, user_id: int, new_hashed_password: str) -> bool:
-        pass
+    def update(self, user_id: int, new_hashed_password: str) -> bool: ...
 
     def query_one(self, user_id: int) -> User | None:
-        sql: str = f"SELECT * FROM `{self.table_name}` WHERE `user_id` = %s"
+        sql: str = f"SELECT * FROM {self.table_name} WHERE {self.primary_key_name} = %s"
         with Storage() as storage:
             result = storage.query_one(sql, (user_id,))
             if result == None:
@@ -46,11 +45,11 @@ class UserDao(Dao):
                     create_time=result["create_time"],
                 )
 
-    def query_by_condition(self, query_condition: QueryCondition) -> List[User]:
-        offset: int = (query_condition.page - 1) * query_condition.limit
-        sql: str = f"SELECT * FROM `{self.table_name}` LIMIT %s, %s"
+    def query_by_condition(self, page: int, limit: int) -> List[User]:
+        offset: int = (page - 1) * limit
+        sql: str = f"SELECT * FROM {self.table_name} LIMIT %s, %s"
         with Storage() as storage:
-            results = storage.query_all(sql, (offset, query_condition.limit))
+            results = storage.query_all(sql, (offset, limit))
             return [
                 User(
                     user_id=int(item["user_id"]),

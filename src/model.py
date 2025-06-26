@@ -1,6 +1,5 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
-from typing import Tuple
 
 
 class DatabaseConfig(BaseModel):
@@ -9,12 +8,6 @@ class DatabaseConfig(BaseModel):
     user: str
     password: str
     database: str
-
-
-class QueryCondition(BaseModel):
-    page: int
-    limit: int
-    onther: Tuple | None
 
 
 class User(BaseModel):

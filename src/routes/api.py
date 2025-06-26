@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from src.schemas.response import SuccessResponse
 from src.exceptions.api_exception import NotFoundException, ValidationError
-from src.model import Pagination, QueryCondition
+from src.model import Pagination
 from src.service.service import Service
 from src.service.user_service import UserService
 from src.service.subset_service import SubsetService
@@ -31,9 +31,7 @@ def handle_pagination_request(
             page = totalPages
         count: int = service.get_counts()
         return SuccessResponse(
-            data=service.query_by_page(
-                QueryCondition(page=page, limit=limit, onther=None)
-            ),
+            data=service.query_by_page(page, limit),
             meta={
                 "info": "success",
                 "pagination": Pagination(
@@ -71,8 +69,30 @@ async def subset(page: int = 1, limit: int = 15):
 
 
 @api_router.get("/article", response_model=SuccessResponse, status_code=200)
-async def article(page: int = 1, limit: int = 15):
-    return handle_pagination_request(ArticleService(), page, limit)
+async def article(subset: int = 1, page: int = 1, limit: int = 15):
+    handle_out_of_range_num(subset)
+    handle_out_of_range_num(page)
+    handle_out_of_range_num(limit)
+    try:
+        service: Service = ArticleService()
+        totalPages: int = service.get_pages(limit)
+        if page > totalPages:
+            page = totalPages
+        count: int = service.get_counts()
+        return SuccessResponse(
+            data=service.query_by_page(subset, page, limit),
+            meta={
+                "info": "success",
+                "pagination": Pagination(
+                    total_count=count,
+                    total_pages=totalPages,
+                    current_page=page,
+                    limit_count=limit,
+                ),
+            },
+        )
+    except NotFoundException as e:
+        raise NotFoundException(detail=e.json())
 
 
 @api_router.get("/user/{user_id}", response_model=SuccessResponse, status_code=200)

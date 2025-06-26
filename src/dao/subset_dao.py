@@ -2,7 +2,7 @@ from typing import List
 from src.utils.logger import Logger
 from src.utils.storage import Storage
 from src.dao.dao import Dao
-from src.model import Subset, QueryCondition
+from src.model import Subset
 
 
 table_name: str = "subset"
@@ -16,7 +16,7 @@ class SubsetDao(Dao):
         super().__init__(table_name, primary_key_name)
 
     def add(self, subset_name: str) -> bool:
-        sql: str = f"""INSERT INTO `{self.table_name}` (subset_name) VALUES (%s);"""
+        sql: str = f"""INSERT INTO {self.table_name} (subset_name) VALUES (%s);"""
         with Storage() as storage:
             storage.save(sql, (subset_name,))
             return True
@@ -26,7 +26,7 @@ class SubsetDao(Dao):
         pass
 
     def query_one(self, subset_id: int) -> Subset | None:
-        sql: str = f"SELECT * FROM `{self.table_name}` WHERE subset_id = %s"
+        sql: str = f"SELECT * FROM {self.table_name} WHERE {self.primary_key_name} = %s"
         with Storage() as storage:
             result = storage.query_one(sql, (subset_id))
             if result == None:
@@ -37,11 +37,11 @@ class SubsetDao(Dao):
                     subset_name=result["subset_name"],
                 )
 
-    def query_by_condition(self, query_condition: QueryCondition) -> List[Subset]:
-        offset: int = (query_condition.page - 1) * query_condition.limit
+    def query_by_condition(self, page: int, limit: int) -> List[Subset]:
+        offset: int = (page - 1) * limit
         sql: str = f"SELECT * FROM {self.table_name} ORDER BY subset_id LIMIT %s, %s "
         with Storage() as storage:
-            results = storage.query_all(sql, (offset, query_condition.limit))
+            results = storage.query_all(sql, (offset, limit))
             return [
                 Subset(
                     subset_id=int(item["subset_id"]),

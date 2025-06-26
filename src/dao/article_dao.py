@@ -4,7 +4,7 @@ from src.dao.dao import Dao
 from src.dao.subset_dao import SubsetDao
 from src.dao.user_dao import UserDao
 from src.utils.storage import Storage
-from src.model import User, Subset, Article, QueryCondition
+from src.model import User, Subset, Article
 
 
 table_name: str = "article"
@@ -43,7 +43,7 @@ class ArticleDao(Dao):
             return True
         return False
 
-    def add_read_count(self, article_id: int):
+    def add_read_count(self, article_id: int) -> bool:
         sql: str = (
             f"UPDATE `{self.table_name}` SET read_count = read_count + 1 WHERE article_id = %s"
         )
@@ -76,11 +76,13 @@ class ArticleDao(Dao):
                     read_count=result["read_count"],
                 )
 
-    def query_by_condition(self, query_condition: QueryCondition) -> List[Article]:
-        offset: int = (query_condition.page - 1) * query_condition.limit
-        sql: str = f"SELECT * FROM `{self.table_name}` LIMIT %s, %s"
+    def query_by_condition(
+        self, subset_id: int, page: int, limit: int
+    ) -> List[Article]:
+        offset: int = (page - 1) * limit
+        sql: str = f"SELECT * FROM {self.table_name} WHERE subset_id = %s LIMIT %s, %s"
         with Storage() as storage:
-            results = storage.query_all(sql, (offset, query_condition.limit))
+            results = storage.query_all(sql, (subset_id, offset, limit))
             return [
                 Article(
                     article_id=int(item["article_id"]),
